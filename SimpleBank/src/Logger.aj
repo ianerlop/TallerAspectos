@@ -10,28 +10,24 @@ public aspect Logger {
     pointcut success() : call(* moneyMakeTransaction(..) );
     after() : success() {
     	String textToAppend = "Transacción realizada el " + cal.getTime().toString() + "\n";
-    	try {
-			BufferedWriter writer = new BufferedWriter(
-			        new FileWriter(file, true));
-			writer.write(textToAppend);
-		    writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}   
+    	save(file, textToAppend);
     }
+    
     pointcut success2() : call(* moneyWithdrawal(..) );
     after() : success2() {
     	String textToAppend = "Retiro realizado el " + cal.getTime().toString() + "\n";
+    	save(file,textToAppend);
+    }
+    
+    static void save(File file, String message) {
     	try {
 			BufferedWriter writer = new BufferedWriter(
 			        new FileWriter(file, true));
-			writer.write(textToAppend);
+			writer.write(message);
 		    writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}   
-    	
-    	
+		}
     }
     
 }
